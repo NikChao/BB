@@ -18,6 +18,8 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
+import java.util.HashMap;
+
 public class Home extends AppCompatActivity {
 
     TextView fireData;
@@ -37,10 +39,13 @@ public class Home extends AppCompatActivity {
         setNameAndID();
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 
+        final SharedPreferences sp = (SharedPreferences) Home.this.getSharedPreferences(getString(R.string.PREF_FILE),
+                MODE_PRIVATE);
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Settings", Snackbar.LENGTH_INDEFINITE)
+                Snackbar.make(view, sp.getString(getString(R.string.User_ID), null), Snackbar.LENGTH_INDEFINITE)
                         .setAction("Action", null).show();
             }
         });
@@ -66,8 +71,8 @@ public class Home extends AppCompatActivity {
                     } else {
                         User.setID(ID);
                         User.setuName(User_Name);
-                        welcomeMsg = "Welcome " + SuperData + "...bitch"
-                        + "\n" + "Your Bitch Balance = " + balance ;
+                        welcomeMsg = "Welcome " + SuperData /*+ "...bitch"*/
+                        + "\n" + "Your "+/*Bitch*/ "Balance = " + balance ;
                     }
                 }
                 fireData.setText(welcomeMsg);

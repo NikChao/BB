@@ -21,12 +21,14 @@ import android.widget.TextView;
 //import com.firebase.client.FirebaseError;
 //import com.firebase.client.ValueEventListener;
 
+import com.firebase.client.Firebase;
+
 import java.util.jar.Attributes;
 
 public class MainActivity extends Activity {
 
     //TextView fireData;
-    //Firebase memRef;
+    Firebase memRef;
     //private static String url = "https://dazzling-fire-538.firebaseio.com/";
     //private static String User_Name;
     //private static String ID = "004";
@@ -36,7 +38,7 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //Firebase.setAndroidContext(this);
+        Firebase.setAndroidContext(this);
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //setSupportActionBar(toolbar);
 
@@ -54,6 +56,7 @@ public class MainActivity extends Activity {
             goToLogin();
         } else {
             NoNetDialogue noNet = new NoNetDialogue();
+
         }
     }
 

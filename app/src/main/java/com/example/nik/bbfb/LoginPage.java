@@ -28,16 +28,18 @@ public class LoginPage extends AppCompatActivity {
     static EditText idEdit;
     static String name = null;
     static String ID = null;
+
     static Firebase ref = new Firebase("https://dazzling-fire-538.firebaseio.com/");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_page);
+        //Firebase.setAndroidContext(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        SharedPreferences sp = (SharedPreferences) LoginPage.this.getSharedPreferences(getString(R.string.PREF_FILE),
+        final SharedPreferences sp = (SharedPreferences) LoginPage.this.getSharedPreferences(getString(R.string.PREF_FILE),
                 MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         editor.clear();
@@ -67,7 +69,7 @@ public class LoginPage extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //setValues(view);
-                Snackbar.make(view, "SETTINGS", Snackbar.LENGTH_INDEFINITE)
+                Snackbar.make(view, sp.getString("ID", null), Snackbar.LENGTH_INDEFINITE)
                         .setAction("Action", null).show();
                 //Intent intent = new Intent("com.example.nik.bbfb.Groups");
                 //startActivity(intent);
@@ -124,9 +126,9 @@ public class LoginPage extends AppCompatActivity {
             //going to leave the below as true for now because the ID is the unique identifier
             if (true) {
                 Random rn = new Random();
-                int randnum = (rn.nextInt() % 10000) + 1;
+                int randnum = rn.nextInt(10000);
                 while(userG.child(Integer.toString(randnum)) == null) {
-                    randnum = (rn.nextInt() % 10000) + 1;
+                    randnum = rn.nextInt(10000);
                 }
                 int i = randnum;
                 ID = Integer.toString(i);
