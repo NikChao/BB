@@ -27,4 +27,6 @@ public class NoNetDialogue extends DialogFragment {
 
         return builder.create();
     }
+
+
 }
