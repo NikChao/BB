@@ -53,7 +53,7 @@ public class MainActivity extends Activity {
         if(isInternet()) {
             goToLogin();
         } else {
-            //TODO create popup which prompts to login to internet and press OK
+            NoNetDialogue noNet = new NoNetDialogue();
         }
     }
 
