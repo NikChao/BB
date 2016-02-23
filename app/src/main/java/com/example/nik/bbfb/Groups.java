@@ -16,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.LinearLayout;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.RelativeLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -31,7 +32,6 @@ public class Groups extends Activity {
 
     String[] myGroupIDs;
     String[] myGroups;
-    TextView[] groupButtons;
     static TableRow gl;
     static TableRow.LayoutParams glp;
     final static String url = "https://dazzling-fire-538.firebaseio.com/Group/";
@@ -57,11 +57,11 @@ public class Groups extends Activity {
                 //groupView = (TextView) findViewById(R.id.groupRL);
                 myGroups = new String[myGrCount];
                 myGroupIDs = new String[myGrCount];
-                groupButtons = new Button[myGrCount];
                 int i = 0;
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     if (ds.child("Members").hasChild(User.getID())) {
                         myGroups[i] = ds.child("Name").getValue().toString();
+                        myGroupIDs[i] = ds.child("ID").getValue().toString();
                         myGrStr = myGrStr.concat(myGroups[i] + "\n");
                         i++;
                     }
@@ -69,13 +69,7 @@ public class Groups extends Activity {
                 //groupView.setText(myGrStr);
                 myGrStr = "";
 
-                for (i = 0; i < myGroups.length; i++) {
-                    gl = (TableRow)findViewById(R.id.dynamicButtonLayout);
-                    glp = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT);
-                    groupButtons[i] = new Button(Groups.this);
-                    groupButtons[i].setText(myGroups[i]);
-                    gl.addView(groupButtons[i], glp);
-                }
+                generateButtons();
 
 
             }
@@ -99,12 +93,32 @@ public class Groups extends Activity {
 
     }
 
-    public void openGroup(String groupID, String groupName, String[] groupMembers) {
+    public void generateButtons() {
+        LinearLayout ll = (LinearLayout) findViewById(R.id.tt);
+        for(int i = 0; i < myGroups.length; i++) {
+            final int index = i;
+            Button btn = new Button(this);
+            btn.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT));
+            btn.setId(i);
+            btn.setText(myGroups[i]);
+
+            btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    openGroup(myGroupIDs[index], myGroups[index]);
+                }
+            });
+            ll.addView(btn);
+        }
+    }
+
+    public void openGroup(String groupID, String groupName) {
         Intent intent = new Intent("com.example.nik.bbfb.IndividualGroup");
         Bundle groupBundle = new Bundle();
         groupBundle.putString("groupID", groupID);
         groupBundle.putString("groupName", groupName);
-        groupBundle.putStringArray("groupMembers", groupMembers);
+        //groupBundle.putStringArray("groupMembers", groupMembers);
         intent.putExtra("groupBundle", groupBundle);
         startActivity(intent);
         finish();
