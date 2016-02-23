@@ -29,6 +29,7 @@ import com.firebase.client.ValueEventListener;
 public class Groups extends Activity {
 
     String myGrStr = "";
+    private static boolean gotData = false;
 
     String[] myGroupIDs;
     String[] myGroups;
@@ -69,7 +70,10 @@ public class Groups extends Activity {
                 //groupView.setText(myGrStr);
                 myGrStr = "";
 
-                generateButtons();
+                if(!gotData) {
+                    generateButtons();
+                    gotData = true;
+                }
 
 
             }
@@ -104,6 +108,7 @@ public class Groups extends Activity {
             btn.setText(myGroups[i]);
 
             btn.setOnClickListener(new View.OnClickListener() {
+
                 @Override
                 public void onClick(View v) {
                     openGroup(myGroupIDs[index], myGroups[index]);

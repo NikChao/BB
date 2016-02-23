@@ -6,6 +6,8 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
 
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -16,11 +18,12 @@ import java.util.Random;
 
 public class IndividualGroup extends AppCompatActivity {
 
-    //private static String name;
-    //private static String groupID;
-    //private static String[] members;
-    //private static int[] memberDebt;
-    //public final String url = "https://dazzling-fire-538.firebaseio.com/";
+    private static String thisName;
+    private static String thisGroupID;
+    private static String[] theseMembers;
+    private static int[] theseMemberDebts;
+    private static boolean gotData = false;
+    public final String url = "https://dazzling-fire-538.firebaseio.com";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,22 +32,30 @@ public class IndividualGroup extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        /*Bundle groupBundle = getIntent().getExtras();
-        name = groupBundle.getString("groupName");
-        groupID = groupBundle.getString("groupID");
-        members = groupBundle.getStringArray("groupMembers");
-        memberDebt = new int[members.length];*/
+        Bundle groupBundle = getIntent().getExtras();
+        thisName = groupBundle.getString("groupName");
+        thisGroupID = groupBundle.getString("groupID");
+        //theseMembers = getMembers(thisName, thisGroupID);
+        //theseMemberDebts = new int[theseMembers.length];
 
-   /*     Firebase memRef = new Firebase(url);
+
+        //TODO fix up this dataframe->generateButtons (use Groups as reference)
+        /*Firebase memRef = new Firebase(url + "/" +thisGroupID + "/Group");
         memRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                int i = 0;
+                int numMembers = (int) dataSnapshot.child("Member").getChildrenCount();
+                theseMembers = new String[numMembers];
+                theseMemberDebts = new int[numMembers];
+                for(DataSnapshot ds : dataSnapshot.child("Member").getChildren()) {
+                    theseMembers[i] = ds.getKey().toString();
+                    i++;
+                }
 
-                for(DataSnapshot ds : dataSnapshot.child("Group").child(groupID)
-                        .child("Members").getChildren()) {
-                    String Str = new String();
-                    int memberIndex = Str.indexOf((String) ds.getKey());
-                    memberDebt[memberIndex] = (int) ds.getValue();
+                if(!gotData) {
+                    generateButtons();
+                    gotData = true;
                 }
             }
 
@@ -52,8 +63,8 @@ public class IndividualGroup extends AppCompatActivity {
             public void onCancelled(FirebaseError firebaseError) {
 
             }
-        });
-        */
+        });*/
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,9 +73,28 @@ public class IndividualGroup extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
     }
 
+    public void generateButtons() {
+        LinearLayout ll = (LinearLayout) findViewById(R.id.igtt);
+        for(int i = 0; i < 3; i++) {
 
+            Button btn = new Button(this);
+            btn.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT));
+            btn.setId(i);
+            btn.setText(theseMembers[i]);
+
+            btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
+            ll.addView(btn);
+        }
+    }
 
     /**public void sendBitchPing(String toID) {
         Random rnd = new Random();
@@ -88,5 +118,12 @@ public class IndividualGroup extends AppCompatActivity {
         return url.concat("Group/").concat(query);
     }
     */
+
+    public String[] getMembers(String n, String id) {
+
+        String[] members = {"test", "test2", "test3"};
+
+        return members;
+    }
 
 }
